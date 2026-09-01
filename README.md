@@ -4,8 +4,9 @@
 [![Pixi Badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/prefix-dev/pixi/main/assets/badge/v0.json)](https://pixi.sh)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![Typing: ty](https://img.shields.io/badge/typing-ty-EFC621.svg)](https://github.com/astral-sh/ty)
+[![Copier](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/copier-org/copier/master/img/badge/badge-black.json)](https://github.com/copier-org/copier)
 
-A [cookiecutter](https://github.com/audreyr/cookiecutter) for setting up [Pixi](https://pixi.sh/) projects for pure Python development, based on [this project from @jevandezande](https://github.com/jevandezande/pixi-cookiecutter).
+A [copier](https://copier.readthedocs.io/) template for setting up [Pixi](https://pixi.sh/) projects for pure Python development, based on [this project from @jevandezande](https://github.com/jevandezande/pixi-cookiecutter).
 This is primarily for my own devlopment.
 For those interested in something similar, I would recommend the cookiecutter from @jevandezande as a more user-friendly and customizable alternative.
 
@@ -20,15 +21,11 @@ For those interested in something similar, I would recommend the cookiecutter fr
 - Code coverage with [PyTest-Cov](https://pytest-cov.readthedocs.io/en/latest/)
 - Git hooks with [LeftHook](https://lefthook.dev/)
 - Versioning and release triggering with [tbump](https://github.com/your-tools/tbump)
-- Markdown-based documentation with [Sphinx](https://www.sphinx-doc.org/en/master/) and [MyST Markdown](https://mystmd.org/)
-- Documentation hosting on [GitHub Pages](https://docs.github.com/en/pages)
-- Auto-generatd API documentation with [Sphinx-Autodoc2](https://sphinx-autodoc2.readthedocs.io/en/latest/)
 - Continuous integration with [GitHub Actions](https://github.com/features/actions), including:
-    - Linting, formatting, testing, etc.
-    - Deploying documentation site
-    - Publishing Conda and PyPI packages
-    - Creating releases
-
+  - Linting, formatting, testing, etc.
+  - Deploying documentation site
+  - Publishing Conda and PyPI packages
+  - Creating releases
 
 ## Instructions
 
@@ -36,9 +33,11 @@ For those interested in something similar, I would recommend the cookiecutter fr
 
 First, install Pixi using the command shown [here](https://pixi.prefix.dev/latest/installation/).
 Then install Cookiecutter as follows.
+
 ```sh
-pixi global install cookiecutter
+pixi global install copier
 ```
+
 Optionally, you can also install `direnv` to automatically load your environment for you.
 
 ### Setup
@@ -46,19 +45,21 @@ Optionally, you can also install `direnv` to automatically load your environment
 #### Create Local Repository
 
 Use the following command to create a new project from this cookiecutter.
+
 ```sh
-cookiecutter gh:avcopan/cookiecutter-pixi-python
+copier copy gh:avcopan/copier-pixi-python <repo_name>
 ```
 
 #### Prepare Remote GitHub Repository
 
-Follow [these instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) to create an empty remote repository on GitHub using the same package name as above.
+Follow [these instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) to create an empty remote repository on GitHub using the same name as above.
 Then complete the following configurations, which are needed by some of the GitHub Actions workflows.
 
 **Documentation.**
 To enable building and deploying your documentation site, navigate to navigate
 to `Settings > Pages` on your GitHub repository site and set the `Source` for
 your GitHub Pages deployment to "GitHub Actions".
+(Currently removed! I plan to add [GreatDocs](https://posit-dev.github.io/great-docs/) documentation.)
 
 **Conda publication.**
 On [Anaconda.org](https://anaconda.org/), log in or set up an account,navigate to `Settings > Access`, and create an API token.
@@ -69,13 +70,12 @@ to add the API token as a secret on your GitHub repository, giving it the name
 "ANACONDA_API_KEY".
 
 **PyPI publication.**
-On both [PyPI](https://pypi.org/) and [Test PyPI](https://test.pypi.org/), log in or set up an account, navigate to `Account settings` and scroll down to `API tokens` to add an API token for each.
-Save each of these API tokens somewhere secure, such as a password manager.
+On [PyPI](https://pypi.org/), log in or set up an account, navigate to `Account settings` and scroll down to `API tokens` to add an API token for each.
+Save the API token somewhere secure, such as a password manager.
 Then follow
 [these instructions](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets#creating-secrets-for-a-repository)
-to add the API token for Test PyPI as a secret on your GitHub repository, giving
+to add the API token as a secret on your GitHub repository, giving
 it the name "UV_PUBLISH_TOKEN".
-(For releases, you will replace this with your API token for the actual PyPI.)
 
 #### Initialize Local Repository
 
