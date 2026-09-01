@@ -1,3 +1,5 @@
+_subdirectory: template
+
 # questions
 package_name:
   type: str
