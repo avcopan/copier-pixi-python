@@ -3,20 +3,20 @@ _subdirectory: template
 # questions
 package_name:
   type: str
-  help: Importable package name
-  default: package_name
+  help: Package name
 
 author_name:
   type: str
   help: Author name
-  default: Your Name
 
 author_email:
   type: str
   help: Author email
-  default: email@example.com
+
+github_org_name:
+  type: str
+  help: GitHub username or organization
 
 anaconda_org_name:
   type: str
-  help: Anaconda organization name
-  default: anaconda-org-name
+  help: Anaconda username or organization
