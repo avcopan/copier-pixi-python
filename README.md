@@ -256,6 +256,8 @@ This tests the setup and all pre-commit hooks of the generated project, includin
 Uncommitted changes to the template are included, so you can test changes before
 committing them.
 The test needs network access to install the project's environments.
+The [test workflow](.github/workflows/test.yml) runs this test on GitHub Actions
+for every push to the template repository.
 
 ### Using Pixi on an HPC Cluster
 
