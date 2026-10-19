@@ -61,42 +61,24 @@ to `Settings > Pages` on your GitHub repository site and set the `Source` for
 your GitHub Pages deployment to "GitHub Actions".
 (Currently removed! I plan to add [GreatDocs](https://posit-dev.github.io/great-docs/) documentation.)
 
-**Conda publication.**
-On [Anaconda.org](https://anaconda.org/), log in or set up an account,navigate to `Settings > Access`, and create an API token.
-Save the API token somewhere secure, such as a password manager.
-Then follow
-[these instructions](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets#creating-secrets-for-a-repository)
-to add the API token as a secret on your GitHub repository, giving it the name
-"ANACONDA_API_KEY".
+**Package publication.**
+The release workflow publishes packages using
+[Trusted Publishing](https://docs.pypi.org/trusted-publishers/), so no API tokens or
+secrets are needed.
+Instead, you tell each package index once that your repository's `release.yml`
+workflow is allowed to publish to it.
 
-**PyPI publication.**
-Publishing to PyPI uses
-[Trusted Publishing](https://docs.pypi.org/trusted-publishers/),
-so no API token is needed.
-Instead, you tell PyPI once which GitHub workflow is allowed to publish your package.
-When the release workflow runs, GitHub gives it a short-lived identity token
-(this is what the `id-token: write` permission in
-[`release.yml`](template/.github/workflows/release.yml) is for),
-which `uv publish` automatically exchanges with PyPI for a temporary upload token.
-To set this up, do the following on both [PyPI](https://pypi.org/) and
-[Test PyPI](https://test.pypi.org/) (these are separate sites with separate accounts):
-
-1. Log in or set up an account, navigate to `Your account > Publishing`, and
-   [add a new pending publisher](https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/)
-   under "GitHub".
-   (A "pending" publisher lets the first upload create the project, so it does
-   not need to exist on PyPI yet.)
-2. Fill in the form as follows:
-   - PyPI Project Name: your package name
-   - Owner: your GitHub username or organization
-   - Repository name: your repository name
-   - Workflow name: `release.yml`
-   - Environment name: leave blank
-
-Note that Trusted Publishing only works from GitHub Actions.
-If you ever need to upload from your own computer, you will need to create an
-API token under `Account settings > API tokens` and pass it to `uv publish`
-with `--token`.
+- **Conda (prefix.dev).**
+  Create a channel on [prefix.dev](https://prefix.dev/), if you do not have one yet,
+  and then follow
+  [these instructions](https://prefix.dev/docs/prefix/channels/access#configure-repository-access)
+  to add Repository Access for GitHub, using the workflow filename `release.yml` and
+  the Read/write mode.
+- **PyPI.**
+  Follow
+  [these instructions](https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/)
+  to add a pending publisher on both [PyPI](https://pypi.org/) and
+  [Test PyPI](https://test.pypi.org/), using the workflow name `release.yml`.
 
 #### Initialize Local Repository
 
@@ -226,12 +208,12 @@ Under the hood, the release workflow runs the following Pixi tasks:
 
 - `build-conda`: builds the Conda package into `dist/` with
   [`pixi publish --target-dir dist`](https://pixi.prefix.dev/latest/reference/cli/pixi/publish/)
-- `publish-conda`: uploads it to Anaconda.org with
-  [`pixi upload anaconda`](https://pixi.prefix.dev/latest/reference/cli/pixi/upload/anaconda/),
-  using the "ANACONDA_API_KEY" secret
+- `publish-conda`: uploads it to prefix.dev with
+  [`pixi upload prefix`](https://pixi.prefix.dev/latest/reference/cli/pixi/upload/prefix/)
 - `build-pypi`: builds the wheel and source distribution with `uv build`
-- `publish-pypi` (or `publish-test-pypi`): uploads them with `uv publish`,
-  using [Trusted Publishing](#prepare-remote-github-repository)
+- `publish-pypi` (or `publish-test-pypi`): uploads them with `uv publish`
+
+All uploads use [Trusted Publishing](#prepare-remote-github-repository).
 
 #### Publish to Test PyPI
 

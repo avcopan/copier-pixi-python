@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write  # for PyPI Trusted Publishing
+      id-token: write  # for prefix.dev and PyPI Trusted Publishing
 
     steps:
       - uses: actions/checkout@v6
@@ -39,7 +39,7 @@ jobs:
 
       - name: Publish conda and PyPI packages
         run: |
-          # Publish to Anaconda.org
+          # Publish to prefix.dev
           pixi run publish-conda
 
           # Publish to PyPI (for actual release)
@@ -47,8 +47,6 @@ jobs:
 
           # Publish to Test PyPI (for test release)
           # pixi run publish-test-pypi
-        env:
-          ANACONDA_API_KEY: ${{ secrets.ANACONDA_API_KEY }}
 
   release:
     needs: publish

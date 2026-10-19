@@ -64,7 +64,7 @@ pre-commit = "lefthook run pre-commit --all-files"
 local-pre-commit = "lefthook run local-pre-commit --all-files"
 # Build and publish conda package
 build-conda = "pixi publish --target-dir dist"
-publish-conda = "pixi upload anaconda --owner {{anaconda_org_name}} dist/*.conda"
+publish-conda = "pixi upload prefix --channel {{prefix_channel}} dist/*.conda"
 # Build and publish PyPI package
 build-pypi = "uv build"
 publish-pypi = "uv publish"

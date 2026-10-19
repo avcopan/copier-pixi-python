@@ -17,6 +17,6 @@ github_org_name:
   type: str
   help: GitHub username or organization
 
-anaconda_org_name:
+prefix_channel:
   type: str
-  help: Anaconda username or organization
+  help: prefix.dev channel (e.g. <namespace> or <namespace>/<channel>)
