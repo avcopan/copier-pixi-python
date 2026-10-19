@@ -70,12 +70,33 @@ to add the API token as a secret on your GitHub repository, giving it the name
 "ANACONDA_API_KEY".
 
 **PyPI publication.**
-On [PyPI](https://pypi.org/), log in or set up an account, navigate to `Account settings` and scroll down to `API tokens` to add an API token for each.
-Save the API token somewhere secure, such as a password manager.
-Then follow
-[these instructions](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets#creating-secrets-for-a-repository)
-to add the API token as a secret on your GitHub repository, giving
-it the name "UV_PUBLISH_TOKEN".
+Publishing to PyPI uses
+[Trusted Publishing](https://docs.pypi.org/trusted-publishers/),
+so no API token is needed.
+Instead, you tell PyPI once which GitHub workflow is allowed to publish your package.
+When the release workflow runs, GitHub gives it a short-lived identity token
+(this is what the `id-token: write` permission in
+[`release.yml`](template/.github/workflows/release.yml) is for),
+which `uv publish` automatically exchanges with PyPI for a temporary upload token.
+To set this up, do the following on both [PyPI](https://pypi.org/) and
+[Test PyPI](https://test.pypi.org/) (these are separate sites with separate accounts):
+
+1. Log in or set up an account, navigate to `Your account > Publishing`, and
+   [add a new pending publisher](https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/)
+   under "GitHub".
+   (A "pending" publisher lets the first upload create the project, so it does
+   not need to exist on PyPI yet.)
+2. Fill in the form as follows:
+   - PyPI Project Name: your package name
+   - Owner: your GitHub username or organization
+   - Repository name: your repository name
+   - Workflow name: `release.yml`
+   - Environment name: leave blank
+
+Note that Trusted Publishing only works from GitHub Actions.
+If you ever need to upload from your own computer, you will need to create an
+API token under `Account settings > API tokens` and pass it to `uv publish`
+with `--token`.
 
 #### Initialize Local Repository
 
@@ -201,20 +222,29 @@ When the tag is pushed, it triggers the
 on GitHub Actions, which builds and publishes Conda and PyPI packages for your
 project and posts the new release on GitHub.
 
-#### Publish to PyPI
+Under the hood, the release workflow runs the following Pixi tasks:
+
+- `build-conda`: builds the Conda package into `dist/` with
+  [`pixi publish --target-dir dist`](https://pixi.prefix.dev/latest/reference/cli/pixi/publish/)
+- `publish-conda`: uploads it to Anaconda.org with
+  [`pixi upload anaconda`](https://pixi.prefix.dev/latest/reference/cli/pixi/upload/anaconda/),
+  using the "ANACONDA_API_KEY" secret
+- `build-pypi`: builds the wheel and source distribution with `uv build`
+- `publish-pypi` (or `publish-test-pypi`): uploads them with `uv publish`,
+  using [Trusted Publishing](#prepare-remote-github-repository)
+
+#### Publish to Test PyPI
 
 The
-[release workflow]
-is initially configured to publish to Test PyPI for testing purposes.
-When you are ready to publish to the actual PyPI, you will need to edit the
-[`release.yml` workflow file]({{cookiecutter.package_name}}/.github/workflows/release.yml)
-as follows:
+[`release.yml` workflow file](template/.github/workflows/release.yml)
+publishes to the actual PyPI by default.
+To do a test release on Test PyPI instead, swap the commented line as follows:
 ```sh
-pixi run publish-pypi  #      <-- uncomment for actual release
-# pixi run publish-test-pypi  <-- comment out for actual release
+# pixi run publish-pypi  <-- comment out for test release
+pixi run publish-test-pypi  #      <-- uncomment for test release
 ```
-You will also need change the value of the "UV_PUBLISH_TOKEN" to your PyPI API token instead of your Test PyPI one.
-See [these instructions](#prepare-remote-github-repository) above.
+No other changes are needed, as long as you have added a pending publisher on Test PyPI
+as described [above](#prepare-remote-github-repository).
 
 
 ### Updating Against Cookiecutter Changes

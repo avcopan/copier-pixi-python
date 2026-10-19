@@ -226,5 +226,5 @@ __marimo__/
 .pixi_local_true.lock
 .pixi_local_false.lock
 
-# pixi build
+# conda packages (built by pixi publish)
 *.conda
