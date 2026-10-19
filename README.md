@@ -91,6 +91,13 @@ It then prints the commands to add your GitHub repository as a remote and push t
 Pushing triggers the test workflow, which you can check under the `Actions` tab of
 your GitHub repository.
 
+The init script also offers to set Pixi's
+[pinning strategy](https://pixi.prefix.dev/latest/reference/pixi_configuration/#pinning-strategy)
+to `latest-up` (for all your projects), so that `pixi add` adds lower bounds only,
+like `uv add`.
+These lower bounds are then checked by the `test-lowest` environment (see
+[below](#run-pre-commit-hooks)).
+
 For your first release, consider doing a [test release on Test PyPI](#publish-to-test-pypi).
 
 
@@ -158,6 +165,13 @@ These pre-commit hooks are [configured and run](https://lefthook.dev/configurati
 To temporarily disable them, for example to make a work-in-progress commit, run
 `pixi run hooks off` (and `pixi run hooks on` to re-enable them).
 
+The hooks run the tests with the newest compatible dependency versions (`pixi run test`).
+To also test with the lowest versions allowed by your dependencies' lower bounds, which
+CI does as well, run the following.
+```sh
+pixi run test-lowest
+```
+
 #### Configure Import Contracts
 
 Import contracts are handled by Lint-Imports.
@@ -186,7 +200,7 @@ into an entry for the new version, and creates a release commit tagged with the 
 version number, then pushes both the commit and the tag to GitHub.
 When the tag is pushed, it triggers the
 [release workflow](template/.github/workflows/release.yml)
-on GitHub Actions, which builds and publishes Conda and PyPI packages for your
+on GitHub Actions, which runs the tests and then builds and publishes Conda and PyPI packages for your
 project and posts the new release on GitHub, using the `CHANGELOG.md` entry as the
 release notes.
 
