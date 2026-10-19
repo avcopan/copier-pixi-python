@@ -19,6 +19,7 @@ For those interested in something similar, I would recommend the cookiecutter fr
 - Static typing with [Ty](https://github.com/astral-sh/ty)
 - Testing with [PyTest](https://docs.pytest.org/en/latest/)
 - Code coverage with [PyTest-Cov](https://pytest-cov.readthedocs.io/en/latest/)
+- GitHub Actions workflow linting with [actionlint](https://github.com/rhysd/actionlint)
 - Git hooks with [LeftHook](https://lefthook.dev/)
 - Versioning and release triggering with [tbump](https://github.com/your-tools/tbump)
 - Continuous integration with [GitHub Actions](https://github.com/features/actions), including:
@@ -252,7 +253,9 @@ This generates a project with
 runs its `pixi run init` and `pixi run pre-commit`, and then checks that the
 working tree is clean.
 This tests the setup and all pre-commit hooks of the generated project, including
-`test` and `test-lowest`.
+`test`, `test-lowest`, and `workflows`, which lints its GitHub Actions workflows.
+The test then builds the packages the same way the release workflow does (except for
+the publishing steps).
 Uncommitted changes to the template are included, so you can test changes before
 committing them.
 The test needs network access to install the project's environments.

@@ -44,6 +44,7 @@ ruff = "*"
 ty = "*"
 import-linter = "*"
 lefthook = "*"
+actionlint = "*"
 tbump = "*"
 ipykernel = "*"
 
@@ -74,6 +75,7 @@ fmt = "ruff format ."
 lint = "ruff check . --fix"
 types = "ty check"
 imports = "lint-imports"
+workflows = "actionlint"  # lint the GitHub Actions workflows
 # Run pre-commit hooks (see lefthook.yaml)
 pre-commit = "lefthook run pre-commit --all-files"
 pre-commit-check = "lefthook run pre-commit --all-files --tag check"  # skips the tests
