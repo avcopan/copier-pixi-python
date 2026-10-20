@@ -49,6 +49,8 @@ lefthook = "*"
 actionlint = "*"
 # Releases
 tbump = "*"
+# Template updates
+copier = "*"
 # Notebooks
 ipykernel = "*"
 # Documentation (see great-docs.yml)
@@ -105,6 +107,8 @@ version = "tbump current-version"
 changelog = { cmd = "keepachangelog release {{ version }}", args=["version"] }
 {%- endraw %}
 release = "tbump"
+# Update against template changes (see scripts/copier-update.sh)
+copier-update = "./scripts/copier-update.sh"
 # Toggle Git hooks on/off
 hooks = "./scripts/hooks.sh"
 # Setup and initialize this repository (only run once)

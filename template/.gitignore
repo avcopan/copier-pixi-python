@@ -1,3 +1,6 @@
+# Merge tool backups
+*.orig
+
 # Python caches
 __pycache__/
 .pytest_cache/

@@ -114,6 +114,9 @@ to `latest-up` (for all your projects), so that `pixi add` adds lower bounds onl
 like `uv add`.
 These lower bounds are then checked by the `test-lowest` environment (see
 [below](#run-pre-commit-hooks)).
+It also offers to set Git's
+[merge tool](https://git-scm.com/docs/git-mergetool) to vimdiff (for all your
+projects), for resolving conflicts from [template updates](#updating-against-template-changes).
 
 For your first release, consider doing a [test release on Test PyPI](#publish-to-test-pypi).
 
@@ -282,18 +285,26 @@ Remember to swap the lines back before your first real release.
 To update your project against changes to this template, run the following in a
 clean working tree.
 ```sh
-copier update
+pixi run copier-update
 ```
-Copier re-applies your saved answers (stored in `.copier-answers.yml`) to the latest
-[released version](#releasing-the-template) of the template and merges the changes
-into your project.
+This runs `copier update`, which re-applies your saved answers (stored in
+`.copier-answers.yml`) to the latest [released version](#releasing-the-template) of
+the template and merges the changes into your project.
 See [these instructions](https://copier.readthedocs.io/en/stable/updating/) for
-details, including how to resolve conflicts.
+details.
+If there are no conflicts, the update is committed right away (which runs the
+pre-commit hooks).
+Otherwise, the conflicted files and the commands to commit the update are printed.
+You can resolve the conflicts with `git mergetool`, which, with
+[vimdiff](https://vimhelp.org/diff.txt.html), shows your project's version (LOCAL),
+the previous template version (BASE), and the new template version (REMOTE) above
+the file to edit (MERGED).
+A short vimdiff cheat sheet is printed along with the conflicts.
 
 To try out template changes that have not been released yet, update against the
 latest commit instead.
 ```sh
-copier update --vcs-ref=HEAD
+pixi run copier-update --vcs-ref=HEAD
 ```
 Copier then warns `No git tags found in template; using HEAD as ref`, which is
 expected here.
