@@ -28,7 +28,7 @@ dist/
 .pixi_local_false.lock
 
 # Great Docs build directory (ephemeral, do not commit)
-great-docs/
+/great-docs/
 
 # Great Docs versioned-build artifacts
 _great_docs_build/
