@@ -8,7 +8,6 @@
 
 A [copier](https://copier.readthedocs.io/) template for setting up [Pixi](https://pixi.sh/) projects for pure Python development, based on [this project from @jevandezande](https://github.com/jevandezande/pixi-cookiecutter).
 This is primarily for my own development.
-For those interested in something similar, I would recommend the cookiecutter from @jevandezande as a more user-friendly and customizable alternative.
 
 ## Features
 
@@ -55,13 +54,15 @@ copier copy gh:avcopan/copier-pixi-python <repo_name>
 ```
 
 Copier will prompt you for the package name and other settings.
+For `repo_name`, enter the name of your GitHub repository (by default, the package
+name), which is used for the links to your repository and documentation site.
 For `prefix_channel`, enter the prefix.dev channel to publish to (see
 [below](#prepare-remote-github-repository)), as `<namespace>` or
 `<namespace>/<channel>`.
 
 #### Prepare Remote GitHub Repository
 
-Follow [these instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) to create an empty remote repository on GitHub (without a README, license, or `.gitignore`), using `<repo_name>` from above as its name.
+Follow [these instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) to create an empty remote repository on GitHub (without a README, license, or `.gitignore`), using `repo_name` from above as its name.
 Then complete the following configurations, which are needed by the GitHub Actions workflows.
 
 **Documentation.**
@@ -95,9 +96,8 @@ You are now ready to initialize your local repository by running the following.
 ```sh
 pixi run init
 ```
-This creates the default documentation configuration (see
-[below](#edit-documentation)), creates a Git repository, installs all Pixi
-environments, makes an initial commit, and installs the Git hooks.
+This creates a Git repository, installs all Pixi environments, makes an initial
+commit, and installs the Git hooks.
 It then prints the commands to add your GitHub repository as a remote and push to it.
 Pushing triggers the test and docs workflows, which you can check under the `Actions`
 tab of your GitHub repository.
@@ -212,12 +212,14 @@ The [docs workflow](template/.github/workflows/docs.yml) builds and deploys the 
 on every push to the `main` branch.
 
 The site is built with [Great Docs](https://posit-dev.github.io/great-docs/), and
-configured in the `great-docs.yml` file, which `pixi run init` creates with
-`great-docs init`.
-This file lists every option, commented out at its default value.
-Its `reference` section lists the functions and classes of your API reference, so
-update it as your API changes (see
+configured in the `great-docs.yml` file.
+This is the default configuration written by `great-docs init`, which lists every
+option, commented out at its default value, with this template's presets set (e.g.
+`pypi: false`, which removes the link to PyPI).
+The API reference is generated from your package's public API, which you can
+organize in its `reference` section (see
 [here](https://posit-dev.github.io/great-docs/user-guide/api-documentation.html)).
+The links to your GitHub repository come from `[project.urls]` in `pyproject.toml`.
 You can add user guide pages as `.qmd` files in a `user_guide/` directory, as
 described
 [here](https://posit-dev.github.io/great-docs/user-guide/user-guides.html).

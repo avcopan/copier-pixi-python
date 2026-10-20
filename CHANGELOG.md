@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- A `repo_name` question, used for `[project.urls]` in `pyproject.toml`, which adds links to the GitHub repository in the documentation site
+
+### Changed
+
+- `great-docs.yml` is now part of the template (instead of being created by `pixi run init`), with the API reference discovered automatically and the PyPI link removed
+
 ## [0.1.1] - 2026-10-20
 
 ### Added

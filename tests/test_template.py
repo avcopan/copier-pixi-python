@@ -10,6 +10,7 @@ TEMPLATE = Path(__file__).parents[1]
 
 ANSWERS = {
     "package_name": "mypkg",
+    "repo_name": "mypkg",
     "author_name": "Jane Doe",
     "author_email": "jane@example.com",
     "github_org_name": "janedoe",
