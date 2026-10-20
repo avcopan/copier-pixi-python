@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-10-20
+
 ### Fixed
 
 - The `great-docs` agent skill was missing from `.claude/skills/`, because the `.gitignore` entry for the Great Docs build directory also matched it (the entry is now anchored as `/great-docs/`)
