@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - A pre-commit hook that fails on unresolved merge conflict markers and lists where they are
 
+### Changed
+
+- `pixi run init` ends with a reminder to link the documentation site under "About" on GitHub
+
 ## [0.1.2] - 2026-10-20
 
 ### Added

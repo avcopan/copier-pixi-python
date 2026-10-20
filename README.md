@@ -96,29 +96,29 @@ You are now ready to initialize your local repository by running the following.
 ```sh
 pixi run init
 ```
-This creates a Git repository, installs all Pixi environments, makes an initial
-commit, and installs the Git hooks.
-It then prints the commands to add your GitHub repository as a remote and push to it.
-Pushing triggers the test and docs workflows, which you can check under the `Actions`
-tab of your GitHub repository.
-The docs workflow publishes your documentation site at
-`https://<github_org_name>.github.io/<repo_name>/`.
+This does the following:
 
-Finally, navigate to your GitHub repository site and click the gear icon next to `About`.
-Check the box under `Website` that says "Use your GitHub Pages website".
-This makes it easy to navigate to your documentation site from GitHub.
+- Installs all Pixi environments
+- Creates a Git repository with an initial commit, and installs the [Git hooks](#run-pre-commit-hooks)
+- Asks whether to set some of your global configurations, such as Pixi's
+  [pinning strategy](https://pixi.prefix.dev/latest/reference/pixi_configuration/#pinning-strategy)
+  and Git's [merge tool](https://git-scm.com/docs/git-mergetool)
+- Prints the commands to push your project to GitHub
 
-The init script also offers to set Pixi's
-[pinning strategy](https://pixi.prefix.dev/latest/reference/pixi_configuration/#pinning-strategy)
-to `latest-up` (for all your projects), so that `pixi add` adds lower bounds only,
-like `uv add`.
-These lower bounds are then checked by the `test-lowest` environment (see
-[below](#run-pre-commit-hooks)).
-It also offers to set Git's
-[merge tool](https://git-scm.com/docs/git-mergetool) to vimdiff (for all your
-projects), for resolving conflicts from [template updates](#updating-against-template-changes).
+Then complete the following steps.
 
-For your first release, consider doing a [test release on Test PyPI](#publish-to-test-pypi).
+1. **Push to GitHub.**
+   Run the commands printed at the end, which add your GitHub repository as a remote and push to it.
+   This triggers the test and docs workflows, which you can check under the `Actions` tab of your
+   GitHub repository.
+2. **Link your documentation site.**
+   Navigate to your GitHub repository site and click the gear icon next to `About`.
+   Check the box under `Website` that says "Use your GitHub Pages website".
+   This makes it easy to navigate to your documentation site from GitHub.
+   The site lives at `https://<github_org_name>.github.io/<repo_name>/` and gets updated
+   by the docs workflow on every push to `main`.
+3. **Before your first release.**
+   Consider doing a [test release on Test PyPI](#publish-to-test-pypi).
 
 
 ### Usage
