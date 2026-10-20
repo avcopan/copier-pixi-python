@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Documentation with Great Docs: `pixi run init` creates the default `great-docs.yml`, `pixi run docs-build` and `pixi run docs-preview` build and preview the site, and a docs workflow deploys it to GitHub Pages on every push to `main`
+- The Great Docs agent skills (from great-docs v0.17.0) in `.claude/skills/`
+
 ## [0.0.2] - 2026-10-20
 
 ### Added

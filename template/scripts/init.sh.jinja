@@ -8,6 +8,9 @@ else
   echo "You can install direnv and then run: direnv allow"
 fi
 
+# Create the default documentation configuration, great-docs.yml (skipped if it exists)
+pixi run -e dev great-docs init
+
 # Initialize git repository
 git init -b main
 git add --all

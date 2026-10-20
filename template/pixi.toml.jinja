@@ -39,17 +39,26 @@ ca-certificates = ">=2026.10.18"
 tzdata = ">=2026c"
 
 [feature.dev.dependencies]
+# Dependency management
 uv = "*"
+# Formatting, linting, and pre-commit hooks
 ruff = "*"
 ty = "*"
 import-linter = "*"
 lefthook = "*"
 actionlint = "*"
+# Releases
 tbump = "*"
+# Notebooks
 ipykernel = "*"
+# Documentation (see great-docs.yml)
+quarto = ">=1.9.38"
 
 [feature.dev.pypi-dependencies]
+# Releases
 keepachangelog = "*"
+# Documentation
+great-docs = ">=0.17.0"
 
 [environments]
 default = { solve-group = "default" }
@@ -80,6 +89,9 @@ workflows = "actionlint"  # lint the GitHub Actions workflows
 pre-commit = "lefthook run pre-commit --all-files"
 pre-commit-check = "lefthook run pre-commit --all-files --tag check"  # skips the tests
 pre-commit-local = "lefthook run pre-commit-local --all-files"
+# Build and preview documentation (see great-docs.yml)
+docs-build = "great-docs build"
+docs-preview = { cmd = "great-docs preview", depends-on = ["docs-build"] }
 # Build and publish conda package
 build-conda = "pixi publish --target-dir dist"
 publish-conda = "pixi upload prefix --channel {{prefix_channel}} dist/*.conda"

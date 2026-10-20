@@ -22,8 +22,12 @@ For those interested in something similar, I would recommend the cookiecutter fr
 - GitHub Actions workflow linting with [actionlint](https://github.com/rhysd/actionlint)
 - Git hooks with [LeftHook](https://lefthook.dev/)
 - Versioning and release triggering with [tbump](https://github.com/your-tools/tbump)
+- Documentation with [Great Docs](https://posit-dev.github.io/great-docs/), including auto-generated API reference
+- Documentation hosting on [GitHub Pages](https://docs.github.com/en/pages)
+- Great Docs [agent skills](https://posit-dev.github.io/great-docs/user-guide/agent-skills.html) for [Claude Code](https://code.claude.com/docs/en/skills)
 - Continuous integration with [GitHub Actions](https://github.com/features/actions), including:
   - Linting, formatting, testing, etc.
+  - Deploying the documentation site
   - Publishing Conda and PyPI packages
   - Creating releases
 
@@ -58,7 +62,12 @@ For `prefix_channel`, enter the prefix.dev channel to publish to (see
 #### Prepare Remote GitHub Repository
 
 Follow [these instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) to create an empty remote repository on GitHub (without a README, license, or `.gitignore`), using `<repo_name>` from above as its name.
-Then set up package publication as follows, which is needed by the release workflow.
+Then complete the following configurations, which are needed by the GitHub Actions workflows.
+
+**Documentation.**
+To enable deploying your documentation site, navigate to `Settings > Pages` on your
+GitHub repository site and set the `Source` for your GitHub Pages deployment to
+"GitHub Actions".
 
 **Package publication.**
 The release workflow publishes packages using
@@ -86,11 +95,18 @@ You are now ready to initialize your local repository by running the following.
 ```sh
 pixi run init
 ```
-This creates a Git repository, installs all Pixi environments, makes an initial
-commit, and installs the Git hooks.
+This creates the default documentation configuration (see
+[below](#edit-documentation)), creates a Git repository, installs all Pixi
+environments, makes an initial commit, and installs the Git hooks.
 It then prints the commands to add your GitHub repository as a remote and push to it.
-Pushing triggers the test workflow, which you can check under the `Actions` tab of
-your GitHub repository.
+Pushing triggers the test and docs workflows, which you can check under the `Actions`
+tab of your GitHub repository.
+The docs workflow publishes your documentation site at
+`https://<github_org_name>.github.io/<repo_name>/`.
+
+Finally, navigate to your GitHub repository site and click the gear icon next to `About`.
+Check the box under `Website` that says "Use your GitHub Pages website".
+This makes it easy to navigate to your documentation site from GitHub.
 
 The init script also offers to set Pixi's
 [pinning strategy](https://pixi.prefix.dev/latest/reference/pixi_configuration/#pinning-strategy)
@@ -180,6 +196,38 @@ is currently configured as a placeholder example.
 This contract can be modified in `pyproject.toml`.
 See [here](https://import-linter.readthedocs.io/en/stable/contract_types/) for other contract types.
 
+#### Edit Documentation
+
+The documentation site can be built and previewed locally as follows.
+```sh
+pixi run docs-preview
+```
+This builds the site into `great-docs/_site/` and serves it at
+<http://localhost:3000>.
+To only build the site, run `pixi run docs-build`.
+The [docs workflow](template/.github/workflows/docs.yml) builds and deploys the site
+on every push to the `main` branch.
+
+The site is built with [Great Docs](https://posit-dev.github.io/great-docs/), and
+configured in the `great-docs.yml` file, which `pixi run init` creates with
+`great-docs init`.
+This file lists every option, commented out at its default value.
+Its `reference` section lists the functions and classes of your API reference, so
+update it as your API changes (see
+[here](https://posit-dev.github.io/great-docs/user-guide/api-documentation.html)).
+You can add user guide pages as `.qmd` files in a `user_guide/` directory, as
+described
+[here](https://posit-dev.github.io/great-docs/user-guide/user-guides.html).
+For everything else, see the
+[Great Docs user guide](https://posit-dev.github.io/great-docs/user-guide/introduction.html).
+
+The project also includes the Great Docs
+[agent skills](https://posit-dev.github.io/great-docs/user-guide/agent-skills.html)
+in `.claude/skills/`, which teach Claude Code how to configure the site, write user
+guide pages, and revise docstrings.
+These are copied from the Great Docs release that this template targets, and are
+updated with the template.
+
 #### Release New Versions
 
 The following command shows the current version number.
@@ -263,8 +311,9 @@ runs its `pixi run init` and `pixi run pre-commit`, and then checks that the
 working tree is clean.
 This tests the setup and all pre-commit hooks of the generated project, including
 `test`, `test-lowest`, and `workflows`, which lints its GitHub Actions workflows.
-The test then builds the packages the same way the release workflow does (except for
-the publishing steps).
+The test then builds the documentation site the same way the docs workflow does, and
+the packages the same way the release workflow does (except for the deploying and
+publishing steps).
 Uncommitted changes to the template are included, so you can test changes before
 committing them.
 The test needs network access to install the project's environments.

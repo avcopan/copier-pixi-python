@@ -10,6 +10,9 @@ build-backend = "uv_build"
 requires = ["uv_build"]
 
 # Ruff configurations
+[tool.ruff]
+extend-exclude = [".claude"]  # vendored agent skills
+
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [

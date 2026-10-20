@@ -54,6 +54,9 @@ def test_template(tmp_path: Path) -> None:
     # Note: if direnv is installed, this also runs `direnv allow` on the temporary project
     run(project, "pixi", "run", "init", gitconfig=gitconfig)
     run(project, "pixi", "run", "pre-commit", gitconfig=gitconfig)
+    # Build the documentation site, like the docs workflow (whose deploy step needs GitHub)
+    run(project, "pixi", "run", "docs-build", gitconfig=gitconfig)
+    assert (project / "great-docs" / "_site" / "index.html").exists()
     # Build the packages, like the release workflow (whose other steps need GitHub)
     run(project, "pixi", "run", "build-conda", gitconfig=gitconfig)
     run(project, "pixi", "run", "build-pypi", gitconfig=gitconfig)
