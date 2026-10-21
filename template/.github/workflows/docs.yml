@@ -8,6 +8,11 @@ on:
 permissions:
   contents: read
 
+# Let a running deployment finish before starting the next one
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest

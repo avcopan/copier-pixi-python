@@ -268,6 +268,8 @@ Under the hood, the release workflow runs the following Pixi tasks:
 - `publish-pypi` (or `publish-test-pypi`): uploads them with `uv publish`
 
 All uploads use [Trusted Publishing](#prepare-remote-github-repository).
+They skip files that were already uploaded, so if a release fails partway (for example,
+after the Conda upload but before the PyPI upload), you can simply rerun the workflow.
 
 #### Publish to Test PyPI
 
