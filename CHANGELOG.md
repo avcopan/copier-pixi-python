@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- PyPI showed no license; `license = "MIT"` and `license-files = ["LICENSE"]` are now set in `pyproject.toml`
+- The GitHub link printed by `pixi run release` used the package name instead of the repository name
+
 ## [0.1.5] - 2026-10-20
 
 ### Fixed
