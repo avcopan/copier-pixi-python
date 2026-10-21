@@ -77,18 +77,20 @@ secrets are needed.
 Instead, you tell each package index once that your repository's `release.yml`
 workflow is allowed to publish to it.
 
-- **Conda (prefix.dev).**
-  Create a channel on [prefix.dev](https://prefix.dev/), if you do not have one yet
-  (this is the `prefix_channel` from above), and then follow
-  [these instructions](https://prefix.dev/docs/prefix/channels/access#configure-repository-access)
-  to add Repository Access for GitHub, using the workflow filename `release.yml` and
-  the Read/write mode.
 - **PyPI.**
   Follow
   [these instructions](https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/)
   to add a pending publisher on both [PyPI](https://pypi.org/) and
   [Test PyPI](https://test.pypi.org/), using your package name as the project name
-  and the workflow name `release.yml`.
+  and the workflow filename `release.yml`.
+  If you do not have accounts on these sites yet, create them first.
+- **Conda (prefix.dev).**
+  Follow
+  [these instructions](https://prefix.dev/docs/prefix/channels/access#configure-repository-access)
+  to add Repository Access for GitHub on your channel (the `prefix_channel` from above),
+  using the workflow filename `release.yml` and the Read/write mode.
+  If you do not have an account and a channel on [prefix.dev](https://prefix.dev/) yet,
+  create them first.
 
 #### Initialize Local Repository
 
