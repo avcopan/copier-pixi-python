@@ -6,6 +6,8 @@ The repo root has its own tooling that mirrors the generated projects (tbump rel
 [`README.md`](README.md) is the reference for how everything works.
 Read the relevant section before changing anything.
 The Rust counterpart is `../copier-pixi-rust`; keep the two consistent when a change applies to both.
+Open and deferred items for both templates are in `../TODO.md`, which is not in git.
+Update it when you finish an item or find a new one.
 
 ## Workflow
 
@@ -14,7 +16,9 @@ The Rust counterpart is `../copier-pixi-rust`; keep the two consistent when a ch
   Use absolute paths, because a relative template path is stored relative to the cwd.
 - `pixi run test` (`tests/test_template.py`, about 15 s) generates a project, runs its `pixi run init` and `pixi run pre-commit`, checks for a clean tree, and builds the docs and the conda package.
   This end-to-end test is the only template test.
-  Extend it instead of adding render or file-list tests.
+  Extend it by running more of the generated project's real tasks.
+  Don't add render or file-list tests: they are redundant once the integration test passes, and they break on every small change.
+  The test must stay readable: if testing a task needs non-trivial setup (e.g. `copier-update`, which needs a released template snapshot), verify it by hand instead.
 - `pixi run pre-commit` runs this repo's own hooks (Ruff on `tests/` only, actionlint, clean-tree check).
 - Releases: add CHANGELOG `[Unreleased]` entries, then `pixi run release X.Y.Z` (tbump tags and pushes; `release.yml` runs the test, then makes a GitHub release).
   `copier update` follows the latest tag.
@@ -23,14 +27,18 @@ The Rust counterpart is `../copier-pixi-rust`; keep the two consistent when a ch
 
 ## Conventions
 
-- Keep the template minimal, and judge additions by value against complexity.
+- Keep the template minimal.
+  Rank proposed additions (CI hardening, extra metadata, platform matrices) by value against complexity, and give a do/optional/skip recommendation.
+  Recommend only what fixes a real failure or confusion, and prefer the smallest fix.
 - Explanations go in the template repo's `README.md`.
   `template/README.md.jinja` stays minimal.
 - README style: one sentence per line, as full sentences.
   Use bold lead-ins ending with a period (`**Documentation.**`), menu names in backticks (`Settings > Pages`), and links written as "[these instructions](...)".
-  Setup sections first say briefly what a command does, then list the required manual steps as bold numbered items.
+  Setup sections first say briefly what a command does, then list the required manual steps as bold numbered items, so they can't be missed.
+  Lump minor prompts into one line, and link out for details.
 - Pixi environments: only split them for test isolation.
-  Docs and dev tools go in the `dev` feature, with comments.
+  `test` stays separate from `dev`, so that the tests catch run dependencies that are missing but that `dev` happens to provide.
+  Docs and other tools go in the `dev` feature, grouped with comments; separate docs environments were tried before and only complicated things.
 - Split independent changes into separate commits and review rounds.
 
 ## Pitfalls
