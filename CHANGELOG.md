@@ -10,6 +10,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - A `conflicts` task (`pixi run conflicts`), which checks for unresolved merge conflict markers on its own, e.g. after a merge; the check is now in `scripts/conflicts.sh`, which the pre-commit hook and the `copier-update` instructions run directly, so that it also works when `pixi.toml` itself has conflicts
 
+### Fixed
+
+- Tombi warned that `pixi.toml` defines tables out of order; `[environments]` now comes before the `[feature.*]` tables, and `[feature.test.tasks]` follows `[feature.test.dependencies]`
+- Ruff's `PLR2004` (magic value) failed on literal expected values in tests; it is now ignored in `tests/`
+
 ## [0.1.7] - 2026-10-21
 
 ### Fixed

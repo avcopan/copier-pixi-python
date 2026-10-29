@@ -24,11 +24,21 @@ ignore-pypi-mapping = false
 [package.host-dependencies]
 # Python and UV are automatically included
 
+[environments]
+default = { solve-group = "default" }
+test = { features = ["test"], solve-group = "default"}
+dev = { features = ["dev", "test"], solve-group = "default"}
+# Test with the lowest versions allowed by the lower bounds on the dependencies
+test-lowest = { features = ["test", "lowest"] }
+
 [feature.test.dependencies]
 pytest = ">=9.1.1"
 pytest-cov = ">=7.1.0"
 
-# Solve to the lowest versions allowed by the dependency specs (see test-lowest below)
+[feature.test.tasks]
+test = { cmd = "pytest", default-environment = "test" }
+
+# Solve to the lowest versions allowed by the dependency specs (see test-lowest above)
 [feature.lowest]
 solve-strategy = "lowest"
 
@@ -61,16 +71,6 @@ quarto = ">=1.9.38"
 keepachangelog = "*"
 # Documentation
 great-docs = ">=0.17.0"
-
-[environments]
-default = { solve-group = "default" }
-test = { features = ["test"], solve-group = "default"}
-dev = { features = ["dev", "test"], solve-group = "default"}
-# Test with the lowest versions allowed by the lower bounds on the dependencies
-test-lowest = { features = ["test", "lowest"] }
-
-[feature.test.tasks]
-test = { cmd = "pytest", default-environment = "test" }
 
 [feature.dev.tasks]
 # Manage pyproject.toml with uv
