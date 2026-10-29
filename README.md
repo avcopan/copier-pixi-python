@@ -58,40 +58,16 @@ Copier will prompt you for the package name and other settings.
 For `repo_name`, enter the name of your GitHub repository (by default, the package
 name), which is used for the links to your repository and documentation site.
 For `prefix_channel`, enter the prefix.dev channel to publish to (see
-[below](#prepare-remote-github-repository)), as `<namespace>` or
+[below](#set-up-publishing)), as `<namespace>` or
 `<namespace>/<channel>`.
 
 #### Prepare Remote GitHub Repository
 
 Follow [these instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) to create an empty remote repository on GitHub (without a README, license, or `.gitignore`), using `repo_name` from above as its name.
-Then complete the following configurations, which are needed by the GitHub Actions workflows.
-
-**Documentation.**
-To enable deploying your documentation site, navigate to `Settings > Pages` on your
-GitHub repository site and set the `Source` for your GitHub Pages deployment to
+Then, to enable deploying your documentation site, navigate to `Settings > Pages` on
+your GitHub repository site and set the `Source` for your GitHub Pages deployment to
 "GitHub Actions".
-
-**Package publication.**
-The release workflow publishes packages using
-[Trusted Publishing](https://docs.pypi.org/trusted-publishers/), so no API tokens or
-secrets are needed.
-Instead, you tell each package index once that your repository's `release.yml`
-workflow is allowed to publish to it.
-
-- **PyPI.**
-  Follow
-  [these instructions](https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/)
-  to add a pending publisher on both [PyPI](https://pypi.org/) and
-  [Test PyPI](https://test.pypi.org/), using your package name as the project name
-  and the workflow filename `release.yml`.
-  If you do not have accounts on these sites yet, create them first.
-- **Conda (prefix.dev).**
-  Follow
-  [these instructions](https://prefix.dev/docs/prefix/channels/access#configure-repository-access)
-  to add Repository Access for GitHub on your channel (the `prefix_channel` from above),
-  using the workflow filename `release.yml` and the Read/write mode.
-  If you do not have an account and a channel on [prefix.dev](https://prefix.dev/) yet,
-  create them first.
+(This is needed before you push, since the docs workflow deploys the site on every push.)
 
 #### Initialize Local Repository
 
@@ -120,14 +96,10 @@ Then complete the following steps.
    This makes it easy to navigate to your documentation site from GitHub.
    The site lives at `https://<github_org_name>.github.io/<repo_name>/` and gets updated
    by the docs workflow on every push to `main`.
-3. **Before your first release.**
-   Consider doing a [test release on Test PyPI](#publish-to-test-pypi).
-
-
-### Usage
 
 #### Set Up VS Code
 
+If you use VS Code, set it up as follows.
 Ruff, ty, and pytest are installed in the Pixi environments, which VS Code loads from
 `.envrc` through the direnv extension:
 
@@ -140,6 +112,36 @@ Ruff, ty, and pytest are installed in the Pixi environments, which VS Code loads
 
 `.vscode/settings.json` matches the pre-commit hooks: Ruff formats on save, ty replaces
 Pylance, and pytest runs in the `test` environment.
+
+#### Set Up Publishing
+
+The [release workflow](#release-new-versions) publishes packages using
+[Trusted Publishing](https://docs.pypi.org/trusted-publishers/), so no API tokens or
+secrets are needed.
+Instead, you tell each package index once that your repository's `release.yml`
+workflow is allowed to publish to it.
+This is only needed before your first release, so you can do it at any point after
+setting up your repository.
+
+1. **PyPI.**
+   Follow
+   [these instructions](https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/)
+   to add a pending publisher on both [PyPI](https://pypi.org/) and
+   [Test PyPI](https://test.pypi.org/), using your package name as the project name
+   and the workflow filename `release.yml`.
+   If you do not have accounts on these sites yet, create them first.
+2. **Conda (prefix.dev).**
+   Follow
+   [these instructions](https://prefix.dev/docs/prefix/channels/access#configure-repository-access)
+   to add Repository Access for GitHub on your channel (the `prefix_channel` from above),
+   using the workflow filename `release.yml` and the Read/write mode.
+   If you do not have an account and a channel on [prefix.dev](https://prefix.dev/) yet,
+   create them first.
+3. **Test release.**
+   Consider doing a [test release on Test PyPI](#publish-to-test-pypi) before your first
+   real release.
+
+### Usage
 
 #### Manage Run Dependencies
 
@@ -265,7 +267,8 @@ Once you decide the appropriate next version number according to
 [SemVer](https://semver.org/)
 semantics, describe your changes under the `[Unreleased]` heading in `CHANGELOG.md`,
 following the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
-Then trigger a release by running this command.
+Then trigger a release by running this command (once you have
+[set up publishing](#set-up-publishing)).
 ```sh
 pixi run release <new version number>
 ```
@@ -287,7 +290,7 @@ Under the hood, the release workflow runs the following Pixi tasks:
 - `build-pypi`: builds the wheel and source distribution with `uv build`
 - `publish-pypi` (or `publish-test-pypi`): uploads them with `uv publish`
 
-All uploads use [Trusted Publishing](#prepare-remote-github-repository).
+All uploads use [Trusted Publishing](#set-up-publishing).
 They skip files that were already uploaded, so if a release fails partway (for example,
 after the Conda upload but before the PyPI upload), you can simply rerun the workflow.
 
@@ -302,7 +305,7 @@ To do a test release on Test PyPI instead, swap the commented line as follows:
 pixi run publish-test-pypi  #      <-- uncomment for test release
 ```
 No other changes are needed, as long as you have added a pending publisher on Test PyPI
-as described [above](#prepare-remote-github-repository).
+as described [above](#set-up-publishing).
 Remember to swap the lines back before your first real release.
 
 
