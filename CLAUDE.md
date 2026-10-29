@@ -8,6 +8,8 @@ Read the relevant section before changing anything.
 The Rust counterpart is `../copier-pixi-rust`; keep the two consistent when a change applies to both.
 Open and deferred items for both templates are in `../TODO.md`, which is not in git.
 Update it when you finish an item or find a new one.
+`../trials/avcopan_trial` is a real project generated from this template, with a GitHub repo and releases.
+Use it to test `pixi run copier-update` and releases by hand.
 
 ## Workflow
 
