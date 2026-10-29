@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - A `conflicts` task (`pixi run conflicts`), which checks for unresolved merge conflict markers on its own, e.g. after a merge; the check is now in `scripts/conflicts.sh`, which the pre-commit hook and the `copier-update` instructions run directly, so that it also works when `pixi.toml` itself has conflicts
+- `.vscode/extensions.json`, which recommends the Python (Ruff, ty), direnv, Tombi (for TOML schemas), GitHub Actions, and YAML extensions, so that VS Code loads the Pixi `dev` environment from `.envrc` (see "Set Up VS Code" in the README)
+- `.vscode/settings.json`: format on save with Ruff, ty instead of Pylance, and pytest in the Testing view (`test` environment)
 
 ### Fixed
 

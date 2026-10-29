@@ -42,6 +42,7 @@ pixi global install copier
 ```
 
 Optionally, you can also install [direnv](https://direnv.net/docs/installation.html) to automatically load your environment for you.
+This is also what lets VS Code use the Pixi environment (see [below](#set-up-vs-code)).
 
 ### Setup
 
@@ -124,6 +125,21 @@ Then complete the following steps.
 
 
 ### Usage
+
+#### Set Up VS Code
+
+Ruff, ty, and pytest are installed in the Pixi environments, which VS Code loads from
+`.envrc` through the direnv extension:
+
+1. Install [direnv](https://direnv.net/docs/installation.html) (for example,
+   `pixi global install direnv`).
+2. Open the project folder itself in VS Code (`code <repo_name>`), since the direnv
+   extension only reads the `.envrc` of the workspace root.
+3. Install the recommended extensions (search the Extensions view for `@recommended`).
+4. Allow the `.envrc` when the direnv extension asks, then restart the extensions.
+
+`.vscode/settings.json` matches the pre-commit hooks: Ruff formats on save, ty replaces
+Pylance, and pytest runs in the `test` environment.
 
 #### Manage Run Dependencies
 
