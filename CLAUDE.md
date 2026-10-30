@@ -23,6 +23,7 @@ Use it to test `pixi run copier-update` and releases by hand.
   The test must stay readable: if testing a task needs non-trivial setup (e.g. `copier-update`, which needs a released template snapshot), verify it by hand instead.
 - `pixi run pre-commit` runs this repo's own hooks (Ruff on `tests/` only, actionlint, clean-tree check).
 - Releases: add CHANGELOG `[Unreleased]` entries, then `pixi run release X.Y.Z` (tbump tags and pushes; `release.yml` runs the test, then makes a GitHub release).
+  The user does all pushes and releases: commit and prepare a release (CHANGELOG entries, passing test, clean tree), then say the version to use, but never run `git push` or `pixi run release`.
   `copier update` follows the latest tag.
   README-only changes are not released, since they don't affect generated projects.
   Check `git describe --tags` before claiming that something is unreleased.
