@@ -58,8 +58,8 @@ Copier will prompt you for the package name and other settings.
 For `repo_name`, enter the name of your GitHub repository (by default, the package
 name), which is used for the links to your repository and documentation site.
 For `prefix_channel`, enter the prefix.dev channel to publish to (see
-[below](#set-up-publishing)), as `<namespace>` or
-`<namespace>/<channel>`.
+[below](#set-up-publishing)) as `<owner>/<channel>`, the end of its URL
+(`https://prefix.dev/channels/<owner>/<channel>`).
 
 #### Prepare Remote GitHub Repository
 

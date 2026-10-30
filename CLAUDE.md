@@ -14,7 +14,7 @@ Use it to test `pixi run copier-update` and releases by hand.
 ## Workflow
 
 - Generate a scratch project, including uncommitted template changes:
-  `pixi exec --spec copier copier copy --vcs-ref=HEAD --defaults -d package_name=my_pkg -d author_name=x -d author_email=x@x.x -d github_org_name=x -d prefix_channel=x <abs path to this repo> <dest>`.
+  `pixi exec --spec copier copier copy --vcs-ref=HEAD --defaults -d package_name=my_pkg -d author_name=x -d author_email=x@x.x -d github_org_name=x -d prefix_channel=x/x <abs path to this repo> <dest>`.
   Use absolute paths, because a relative template path is stored relative to the cwd.
 - `pixi run test` (`tests/test_template.py`, 30–50 s locally with a warm cache, about 35 s in CI) generates a project, runs its `pixi run init` and `pixi run pre-commit`, checks for a clean tree, and builds the docs and the conda package.
   This end-to-end test is the only template test.
