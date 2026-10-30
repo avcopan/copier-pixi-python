@@ -173,12 +173,17 @@ These configurations go in the
 #### Manage Local Dependencies
 
 To test against live changes to one or more of your other packages that this
-package depends on, you can add `# local:true/false` markers to your `pixi.toml`
-file as follows.
+package depends on, add a commented-out path dependency with a `# local:true` marker
+to the `[dependencies]` table of your `pixi.toml` file, as follows.
 ```toml
-package-name = "==0.0.8"  # local:false
-# package-name = { path = "/path/to/repository" }  # local:true
+[dependencies]
+# package-name = { path = "../package-name" }  # local:true
 ```
+The published version stays in `pyproject.toml`, where `pixi run add` puts it (with a
+`pypi-conda-map` entry if it isn't on conda-forge under the same name).
+The local checkout's version must satisfy the version bound there.
+Lines marked `# local:false` are commented out while local dependencies are on, if
+you need them.
 You can then use the following to toggle between the published and local versions of these packages.
 ```sh
 pixi run local start    # use local dependencies
@@ -188,7 +193,7 @@ To allow toggling back and forth without needing to repeatedly solve
 dependencies, the lockfile and `.pixi/` folder are stashed as
 `.pixi_local_true.lock` and `.pixi_local_true/` and reused.
 Once you are satisfied with the changes, you must update the published version
-of the dependency and bump the version in `pixi.toml` in order for the
+of the dependency and bump its version bound in `pyproject.toml` in order for the
 pre-commit hooks to pass.
 The first pre-commit hook below toggles off local dependencies to ensure that you are
 testing against the published versions.
