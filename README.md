@@ -42,7 +42,7 @@ pixi global install copier
 ```
 
 Optionally, you can also install [direnv](https://direnv.net/docs/installation.html) to automatically load your environment for you.
-This is also what lets VS Code use the Pixi environment (see [below](#set-up-vs-code)).
+This is also what lets VS Code and Zed use the Pixi environment (see [below](#set-up-vs-code)).
 
 ### Setup
 
@@ -112,6 +112,22 @@ Ruff, ty, and pytest are installed in the Pixi environments, which VS Code loads
 
 `.vscode/settings.json` matches the pre-commit hooks: Ruff formats on save, ty replaces
 Pylance, and pytest runs in the `test` environment.
+
+#### Set Up Zed
+
+If you use Zed, `.zed/settings.json` sets it up to match the pre-commit hooks.
+Ruff formats on save and sorts imports, and ty replaces basedpyright.
+Zed finds Ruff and ty in the Pixi environments itself, so no extensions are needed.
+It also loads `.envrc` for its terminals and language servers if direnv is installed.
+
+1. **Open the project folder itself in Zed** (`zed <repo_name>`), since Zed only reads
+   the `.zed/settings.json` and `.envrc` of the folders you open.
+2. **Run `direnv allow` once in the project folder**, if you use direnv, since Zed does
+   not ask.
+
+To format without saving, run `editor: format` from the command palette (`shift-alt-f`
+on Windows, including Zed connected to WSL, `ctrl-shift-i` on Linux, and `cmd-shift-i`
+on macOS).
 
 #### Set Up Publishing
 
