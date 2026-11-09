@@ -151,6 +151,8 @@ setting up your repository.
    [Test PyPI](https://test.pypi.org/), using your package name as the project name
    and the workflow filename `release.yml`.
    If you do not have accounts on these sites yet, create them first.
+   If your project is already on PyPI, add the publisher under the project's `Manage > Publishing` instead, as described [here](https://docs.pypi.org/trusted-publishers/adding-a-publisher/).
+   Then delete any API token secrets that your old workflows used (such as `UV_PUBLISH_TOKEN` or `ANACONDA_API_KEY`) under `Settings > Secrets and variables > Actions`.
 2. **Conda (prefix.dev).**
    Follow
    [these instructions](https://prefix.dev/docs/prefix/channels/access#configure-repository-access)
@@ -205,6 +207,7 @@ to the `[dependencies]` table of your `pixi.toml` file, as follows.
 ```
 The published version stays in `pyproject.toml`, where `pixi run add` puts it (with a
 `pypi-conda-map` entry if it isn't on conda-forge under the same name).
+Packages that aren't on conda-forge are left out of the Conda package unless they are mapped, so a package on another channel under the same name still needs an entry (e.g. `package-name = "package-name"`).
 The local checkout's version must satisfy the version bound there.
 Lines marked `# local:false` are commented out while local dependencies are on, if
 you need them.
@@ -221,6 +224,29 @@ of the dependency and bump its version bound in `pyproject.toml` in order for th
 pre-commit hooks to pass.
 The first pre-commit hook below toggles off local dependencies to ensure that you are
 testing against the published versions.
+
+**If `pixi run local start` fails.**
+The `local` task runs in the `dev` environment, so Pixi first has to solve the published-dependency state.
+If that state can't be solved (for example, because you raised the bound in `pyproject.toml` to a version of the dependency that isn't released yet), run the script directly instead.
+```sh
+./scripts/local.sh start
+```
+
+**PyPI-only dependencies.**
+A dependency that has no Conda package needs two more entries in `pixi.toml`.
+Map it to `false` in `pypi-conda-map`, which leaves it out of your Conda package explicitly, and add both a `# local:false` and a `# local:true` line for it to the `[pypi-dependencies]` table, as follows.
+```toml
+[package.build.config.pypi-conda-map]
+package-name = false
+
+[pypi-dependencies]
+package-name = ">=1.2"  # local:false
+# package-name = { path = "../package-name", editable = true }  # local:true
+```
+Unlike for Conda dependencies, the `# local:false` line is needed here, since nothing else installs the dependency in your Pixi environments.
+Keep its bound in sync with the one in `pyproject.toml`.
+Conda users of your package have to install such dependencies from PyPI themselves (`pip install` or `[pypi-dependencies]`), so say so in your package's README.
+See the [`pypi-conda-map` docs](https://pixi.prefix.dev/latest/build/backends/pixi-build-python/#pypi-conda-map) for details.
 
 #### Run Pre-Commit Hooks
 
@@ -242,6 +268,11 @@ To temporarily disable them, for example to make a work-in-progress commit, run
 The hooks run the tests twice: with the newest compatible dependency versions
 (`pixi run test`), and with the lowest versions allowed by your dependencies' lower
 bounds (`pixi run test-lowest`).
+
+**Floors for `test-lowest`.**
+The lowest solve also picks the oldest versions of transitive dependencies, and some of these are too old to work, because a package depends on them without an adequate lower bound.
+If `test-lowest` fails for this reason, add a floor for the package to `[feature.lowest.constraints]` in `pixi.toml`, or to `[feature.lowest.pypi-options.dependency-overrides]` for a PyPI package, with a comment saying why.
+The floors that the template puts there are examples.
 
 #### Configure Import Contracts
 
