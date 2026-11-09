@@ -36,6 +36,7 @@ Test `pixi run copier-update` and releases by hand in a real project generated f
   Use bold lead-ins ending with a period (`**Documentation.**`), menu names in backticks (`Settings > Pages`), and links written as "[these instructions](...)".
   Setup sections first say briefly what a command does, then list the required manual steps as bold numbered items, so they can't be missed.
   Lump minor prompts into one line, and link out for details.
+- Dependency bounds follow `template/.claude/rules/dependencies.md` (SPEC 0, no upper bounds, newest dev tools); that includes the template's own `requires-python` (`>= 3.13`, since Python 3.12 dropped out of SPEC 0 in 2026 Q4).
 - Pixi environments: only split them for test isolation.
   `test` stays separate from `dev`, so that the tests catch run dependencies that are missing but that `dev` happens to provide.
   Docs and other tools go in the `dev` feature, grouped with comments; separate docs environments were tried before and only complicated things.
