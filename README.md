@@ -339,7 +339,7 @@ into an entry for the new version, and creates a release commit tagged with the 
 version number, then pushes both the commit and the tag to GitHub.
 When the tag is pushed, it triggers the
 [release workflow](template/.github/workflows/release.yml)
-on GitHub Actions, which runs the tests and then builds and publishes Conda and PyPI packages for your
+on GitHub Actions, which checks that the tag is on `main` (a tag on another branch releases nothing), runs the tests, and then builds and publishes Conda and PyPI packages for your
 project and posts the new release on GitHub, using the `CHANGELOG.md` entry as the
 release notes.
 
