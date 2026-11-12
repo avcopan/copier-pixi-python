@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.1.13] - 2026-11-12
+
 ### Added
 
 - The release workflow first checks that the version tag is on `main`, and stops otherwise, so that a tag on another branch can't publish a release.
