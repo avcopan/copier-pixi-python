@@ -74,9 +74,9 @@ Test `pixi run copier-update` and releases by hand in a real project generated f
   Inline conflicts are unmerged in the index (stage 1 = old template, 2 = project, 3 = new template).
 - Great Docs: the template targets released v0.17.0 (root `great-docs.yml`, `great-docs/_site/`).
   The upstream `main` branch (and its docs site and skills) use a different `docs/` layout.
-  The 0.17.0 wheel doesn't bundle its skills; they are vendored in `template/.claude/skills/` via `git archive v0.17.0 skills/`.
+  The 0.17.0 wheel doesn't bundle its skills; they are vendored in `template/.agents/skills/` (`template/.claude/skills` is a symlink to it, kept by `_preserve_symlinks: true`) via `git archive v0.17.0 skills/`.
   `great-docs init` prompts unless its `.gitignore` entries already exist.
-- The `.gitignore` entry for the docs build dir is anchored (`/great-docs/`), because otherwise it also ignores `.claude/skills/great-docs/`.
+- The `.gitignore` entry for the docs build dir is anchored (`/great-docs/`), because otherwise it also ignores `.agents/skills/great-docs/`.
   Run `git check-ignore` when vendoring files.
-- Ruff formats Python blocks in `.md`, so `.claude` is excluded from Ruff.
+- Ruff formats Python blocks in `.md`, so `.agents` and `.claude` are excluded from Ruff.
 - Copier validators: use Python string methods (e.g. `isidentifier()`); there are no regex filters.
